@@ -1,5 +1,6 @@
 ## Description of processing PCAP files to generate dataset
-For PCAP data, it is recommended to clean it first. Since the program processing logic is not smooth, we detail the data pre-processing for pre-training and fine-tuning as followed.
+For PCAP data, it is recommended to clean it first.
+Since the program processing logic is not smooth, we detail the data pre-processing for pre-training and fine-tuning as followed.
 
 ### Pre-training Stage
 *Main Program*: dataset_generation.py
@@ -8,14 +9,14 @@ For PCAP data, it is recommended to clean it first. Since the program processing
 
 1. Initialization. 
 Set the variable `pcap_path` (line:616) as the directory of PCAP data to be processed. 
-Set the variable `word_dir` (line:23) and `word_name` (line:24) as the storage directory of pre-training daraset.
+Set the variable `word_dir` (line:23) and `word_name` (line:24) as the storage directory of pre-training dataset.
 
 2. Pre-process PCAP. 
 Set the variable `output_split_path` (line:583) and `pcap_output_path` (line:584). 
 The `pcap_output_path` indicates the storage directory where the pcapng format of PCAP data is converted to pcap format. 
 The `output_split_path` represents the storage directory for PCAP data slicing into session format. 
 
-3. Gnerate Pre-training Datasets. 
+3. Generate Pre-training Datasets. 
 Following the completion of PCAP data processing, the program generates a pre-training dataset composed of BURST.
 
 ### Fine-tuning Stage
