@@ -1,11 +1,11 @@
 """
   This script provides an exmaple to wrap UER-py for classification inference.
 """
-import sys
-import os
-import torch
 import argparse
-import collections
+import os
+import sys
+
+import torch
 import torch.nn as nn
 
 uer_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -14,7 +14,6 @@ sys.path.append(uer_dir)
 from uer.utils.constants import *
 from uer.utils import *
 from uer.utils.config import load_hyperparam
-from uer.utils.seed import set_seed
 from uer.model_loader import load_model
 from uer.opts import infer_opts
 from run_classifier import Classifier

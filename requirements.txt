@@ -1,4 +1,12 @@
 torch>=1.0
-argparse
+argparse~=1.4.0
 six>=1.12.0
-packaging
+packaging~=23.1
+
+numpy~=1.24.3
+tqdm~=4.65.0
+scikit-learn~=1.2.2
+scipy~=1.10.1
+scapy~=2.5.0
+flowcontainer~=7.1
+tokenizers~=0.13.3
