@@ -1,4 +1,16 @@
-## IX 的 复现日志
+# IX的复现日志
+
+## 概念
+
+- **BURST**
+    - BURST Generator extracts continues server-to-client or client-to-server packets in one session flow,
+      named as BURST, to represent the partial complete information of a session.
+    - 表示以此通信的完整信息，从双方发送的数据包中提取。
+- Pre-training
+    - Masked BURST Model
+        - 随机 MASK 某些字节，让模型预测 MASK 部分
+    - Same-origin BURST Prediction
+        - 让模型预测两个 Packet (子 BURST) 是否属于同一个 BURST
 
 ### 预训练
 
@@ -50,8 +62,8 @@ python preprocess.py \
     - Encoder: 编码器，使用 BERT Transformer
     - Target: Finetune 阶段可替换的，预训练阶段 使用 BERT Target，MLM & NSP
 - 无监督学习所有流量
-    - nsp: Next sentence prediction, 根据上文预测下一个 Token
-    - mlm: Masked language model, 根据上下文预测 Masked Token
+    - nsp: Next sentence prediction, 预测两个句子之间是否为上下文关系
+    - mlm: Masked language model, 根据当前句子预测 Masked Token
 - 显存不能跑太满，运行一段时间后可能会增加
 
 ```bash
@@ -138,3 +150,10 @@ python3 fine-tuning/run_classifier_infer.py \
   --mask            fully_visible
 ```
 
+## 疑问
+
+1. BURST 的 Datagram2Token 表示为什么要将一个byte与上一个byte、下一个byte分别重复一次表示？
+    - 即 原始流量为 `e8 e7 32 3c ...` 的情况下 要表示为 `e8e7 e732 323c 3c65 ...`
+2. 文章中 4.2 提到根据没有依赖任何明文信息就建立了密文的上下文关系，这是否严谨？
+    - 代码对原始数据的处理只删除的 Ethernet Header、IP Header、TCP Header 的前 4 字节
+    - TCP Header 中保留有明文的 Sequence Number、Acknowledge Number，能够很大程度上帮助判断上下文关系
