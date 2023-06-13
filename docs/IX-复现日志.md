@@ -2,24 +2,35 @@
 
 ### 预训练
 
+#### 构建语料文本
+
+1. 从 PCAP 生成语料文本
+    - 复现过程中，对其代码组织方式进行了少量修改，提高可读性，没有修改其功能
+    - 语料结构：提取 PCAP Packet Payload，双字节 Hex编码，重复一次，空格分隔（使得可以使用BPE分词器构建词汇表）
+    - 疑问：为什么要重叠地重复一次
+    ```bash
+    pip isntall scapy
+    python scripts/1-build-burst-from-pcap.py
+    ```
+
+2. 获取作者使用预训练PCAP生成的语料文本
+    - [下载地址](https://drive.google.com/file/d/1P1Ru6my9QeJs0Mj6vGA4DyGJFXuI9_6t/view?usp=sharing)
+
 #### 构建词汇表
 
-1. 获取作者使用预训练PCAP生成的语料文本
-    - 语料结构：提取 PCAP Packet Payload，双字节 Hex编码，空格分隔；使得可以使用BPE分词器构建词汇表
-    - [下载地址](https://drive.google.com/file/d/1P1Ru6my9QeJs0Mj6vGA4DyGJFXuI9_6t/view?usp=sharing)
-2. 使用 `vocab_process/main.py` 脚本，构建词汇表
+1. 使用 `vocab_process/main.py` 脚本，构建词汇表
     - 注意修改 `word_dir` 与 `word_name` 的位置
     - 复现过程中，对其代码组织方式进行了少量修改，提高可读性，没有修改其功能
 
 ```bash
 # 安装依赖
-pip install scapy flowcontainer tokenizers
-python vocab_process/main.py
+pip install tokenizers
+python scripts/2-build-vocab-from-burst.py
 ```
 
 #### 构建数据集
 
-1. 将**语料文本**转换为使用**词汇表**表示的**数据集**
+1. 将 **语料文本** 转换为使用 **词汇表** 表示的 **数据集**
 
 ```bash
 pip install -r requirements.txt
@@ -82,9 +93,18 @@ python pre-training/pretrain.py \
 
 ### Finetune (CSTNET TLS 1.3 Packet)
 
-- 使用 Classifier 替换 target 进行 finetune
+#### 构建数据集
+
+- 对脚本 `data_process/dataset_generation.py` 进行了一些改动
+    - 修复可读性、安全性、兼容性问题
+
+```bash
+
+```
 
 #### 执行 Finetune
+
+- 模型：使用 Classifier 替换 target 进行 finetune
 
 ```bash
 python3 fine-tuning/run_classifier.py \
